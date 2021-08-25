@@ -51,7 +51,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'gmsi.urls'
+ROOT_URLCONF = 'impactPlanning.urls'
 
 TEMPLATES = [
     {
@@ -69,7 +69,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'gmsi.wsgi.application'
+WSGI_APPLICATION = 'impactPlanning.wsgi.application'
 
 
 # Database
