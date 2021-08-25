@@ -1,0 +1,22 @@
+{% extends "gencal/layout.html" %}
+
+{% block pagetitle %}
+    Weekly Calendar
+{% endblock %}
+
+{% block main %}
+    <div class="container noselect">
+        {% for day, todo in calendar.items %}
+            <div class="card calendar-day">
+                <div class="card-body">
+                    <h5 class="card-title">{{ day }}</h5>
+                    <ul>
+                        {% for entry in todo %}
+                            <li>{{ entry }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

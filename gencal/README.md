@@ -1,0 +1,2 @@
+Design decisions made:
+For items which have multiple stages of rarity (e.g. you could use the alchemy table to exchange 3 of a material for 1 of the next "rank") the site's back end is currently populated by using the name of the item with a green background.  This is either the lowest or second-lowest rarity available in each class.

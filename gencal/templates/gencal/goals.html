@@ -1,0 +1,94 @@
+{% extends "gencal/layout.html" %}
+
+{% block pagetitle %}
+    Goal Setting
+{% endblock %}
+
+{% block main %}
+    Use the tools below to specify which character(s) and weapon(s) you're looking to build: <br/><br/>
+
+    If you have previously entered and saved goals, you will need to enter the same goals again whenever you make changes.  This is an area we can improve, and it's on the to-do list!
+    <form action="{% url 'goals' %}" method="POST" style="position: relative;">
+        {% csrf_token %}
+        <div class="accordion" id="goals-accordion">
+            {# Character Ascension #}
+            <div class="card">
+                <div class="card-header noselect" id="character-ascension-card-header">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#character-ascensions" aria-expanded="true" aria-controls="character-ascensions">
+                            Character Ascension Materials
+                        </button>
+                    </h2>
+                </div>
+                <div id="character-ascensions" class="collapse" aria-labeledby="character-ascension-card-header" data-parent="#goals-accordion">
+                    <div class="card-body">
+                        <ul class="ul-nosymbols noselect">
+                            {% for character in character_names %}
+                            <li>
+                                <input class="form-check-input" type="checkbox" name="{{ character }}CharacterAscensionCheck" value="" id="{{ character }}CharacterAscensionCheck">
+                                <label class="form-check-label" for="{{ character }}CharacterAscensionCheck">
+                                    {{ character }}
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {# Character Talents #}
+            <div class="card">
+                <div class="card-header noselect" id="character-talent-card-header">
+                    <h2 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#character-talents" aria-expanded="false" aria-controls="character-talents">
+                            Character Talent Materials
+                        </button>
+                    </h2>
+                </div>
+                <div id="character-talents" class="collapse" aria-labelledby="character-talent-card-header" data-parent="#goals-accordion">
+                    <div class="card-body">
+                        <ul class="ul-nosymbols noselect">
+                            {% for character in character_names %}
+                            <li>
+                                <input class="form-check-input" type="checkbox" name="{{ character }}CharacterTalentCheck" value="" id="{{ character }}CharacterTalentCheck">
+                                <label class="form-check-label" for="{{ character }}CharacterTalentCheck">
+                                    {{ character }}
+                                </label>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            {# Weapon Ascension #}
+            {% for weapon_type, weapon_list in weapons.items %}
+                <div class="card">
+                    <div class="card-header noselect" id="{{weapon_type}}-ascension-card-header">
+                        <h2 class="mb-0">
+                            <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#{{weapon_type}}-ascensions" aria-expanded="false" aria-controls="{{weapon_type}}-ascensions">
+                                {{weapon_type}} Ascension Materials
+                            </button>
+                        </h2>
+                    </div>
+                    <div id="{{weapon_type}}-ascensions" class="collapse" aria-labelledby="{{weapon_type}}-ascension-card-header" data-parent="#goals-accordion">
+                        <div class="card-body">
+                            <ul class="ul-nosymbols noselect">
+                                {% for weapon in weapon_list %}
+                                <li>
+                                    <input class="form-check-input" type="checkbox" name="{{ weapon.name }}WeaponAscensionCheck" value="" id="{{ weapon.name }}WeaponAscensionCheck">
+                                    <label class="form-check-label" for="{{ weapon.name }}WeaponAscensionCheck">
+                                        {{ weapon.name }}
+                                    </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+
+        <input class="btn btn-primary" type="submit" value="Set Goals" style="position: absolute; right: 0;">
+    </form>
+
+{% endblock %}

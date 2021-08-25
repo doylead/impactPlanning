@@ -1,0 +1,48 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>GenCal</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'gencal/styles.css' %}">
+    <!-- <script src="{% static 'gencal/scripts.js' %}"></script> -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+    {# Adds side navigation bar #}
+    <div class="side-spacer">
+        <div class="side-content">
+            {% if user.is_authenticated %}
+                Howdy {{ user.username }}! <br/>
+                <a href="{% url 'logout' %}">Logout</a><br/>
+            {% else %}
+                <a href="{% url 'login' %}">Login</a><br/>
+                <a href="{% url 'register' %}">Register</a><br/>
+            {% endif %}
+            <br/></br>
+            <a href="{% url 'index' %}">Index</a><br/>
+            <a href="{% url 'goals' %}">Set Goals</a><br/>
+            <a href="{%url 'calendar' %}">Weekly Calendar</a><br/>
+        </div>
+    </div>
+
+    {# Adds main page body #}
+    <div class="main">
+        <div class="page-title">
+            <strong>{% block pagetitle %}{% endblock %}</strong>
+        </div>
+        {% if message %}
+            <div class="alert alert-warning" role="alert">{{ message }}</div>
+        {% endif %}
+        <div class="page-body">
+            {% block main %}
+            {% endblock %}
+        </div>
+    </div>
+
+</body>
+</html>
