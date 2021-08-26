@@ -87,13 +87,13 @@ def goals(request):
     Returns a page where users can set their goals for materials gathering
     """
     if request.method == "POST":
-        if not request.user.is_authenticated:
-            # Get a list of all character names that have been implemented
-            character_names = sorted(list(Character.objects.all().values_list('name', flat=True)))
-            return render(request, "gencal/goals.html", {
-                "message": "Must be logged in to enter goals",
-                "character_names": character_names
-            })
+        # if not request.user.is_authenticated:
+        #     # Get a list of all character names that have been implemented
+        #     character_names = sorted(list(Character.objects.all().values_list('name', flat=True)))
+        #     return render(request, "gencal/goals.html", {
+        #         "message": "Must be logged in to enter goals",
+        #         "character_names": character_names
+        #     })
 
         character_ascension_goals = []
         character_talent_goals = []
@@ -113,17 +113,24 @@ def goals(request):
                 weapon_name = key.replace("WeaponAscensionCheck", "")
                 weapon_ascension_goals.append(weapon_name)
 
-        # Clear previous goals
-        request.user.char_talents.clear()
-        request.user.char_ascension.clear()
-        request.user.weapon_ascension.clear()
+        if request.user.is_authenticated:
+            # Clear previous goals
+            request.user.char_talents.clear()
+            request.user.char_ascension.clear()
+            request.user.weapon_ascension.clear()
 
-        # Add new goals
-        character_ascension_goals_models = Character.objects.filter(name__in=character_ascension_goals)
-        request.user.char_talents.add(*character_ascension_goals_models)
-        # TODO Talents
-        weapon_ascension_goals_models = Weapon.objects.filter(name__in=weapon_ascension_goals)
-        request.user.weapon_ascension.add(*weapon_ascension_goals_models)
+            # Add new goals
+            character_ascension_goals_models = Character.objects.filter(name__in=character_ascension_goals)
+            request.user.char_ascension.add(*character_ascension_goals_models)
+            character_talent_goals_models = Character.objects.filter(name__in=character_talent_goals)
+            request.user.char_talents.add(*character_talent_goals_models)
+            weapon_ascension_goals_models = Weapon.objects.filter(name__in=weapon_ascension_goals)
+            request.user.weapon_ascension.add(*weapon_ascension_goals_models)
+        else:
+            # Clear previous goals and adds new goals, using Django sessions
+            request.session['character_ascension'] = character_ascension_goals
+            request.session['character_talents'] = character_talent_goals
+            request.session['weapon_ascensions'] = weapon_ascension_goals
 
 
     # Get a list of all character names that have been implemented
@@ -152,7 +159,17 @@ def calendar(request):
         calendar[day.__str__()] = []
 
     # Add data for the character talents
-    character_talents = request.user.char_talents.all()
+    if request.user.is_authenticated:
+        character_talents = request.user.char_talents.all()
+        weapon_ascensions = request.user.weapon_ascension.all()
+    else:
+        character_talents = []
+        weapon_ascensions = []
+        if 'character_talents' in request.session:
+            character_talents = Character.objects.filter(name__in=request.session['character_talents'])
+        if 'weapon_ascensions' in request.session:
+            weapon_ascensions = Weapon.objects.filter(name__in=request.session['weapon_ascensions'])
+
     for character in character_talents:
         talent_domain = character.talent_domain
         for day in talent_domain.available.all():
@@ -160,7 +177,6 @@ def calendar(request):
             calendar[day.__str__()].append(display)
 
     # Add data for the weapon ascensions
-    weapon_ascensions = request.user.weapon_ascension.all()
     for weapon in weapon_ascensions:
         ascension_domain = weapon.ascension_domain
         for day in ascension_domain.available.all():
