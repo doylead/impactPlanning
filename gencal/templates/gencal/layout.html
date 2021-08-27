@@ -16,12 +16,15 @@
     {# Adds side navigation bar #}
     <div class="side-spacer">
         <div class="side-content">
-            {% if user.is_authenticated %}
-                Howdy {{ user.username }}! <br/>
-                <a href="{% url 'logout' %}">Logout</a><br/>
-            {% else %}
-                <a href="{% url 'login' %}">Login</a><br/>
-                <a href="{% url 'register' %}">Register</a><br/>
+            {% if false %}
+                {# Temporarily hides the login information #}s
+                {% if user.is_authenticated %}
+                    Howdy {{ user.username }}! <br/>
+                    <a href="{% url 'logout' %}">Logout</a><br/>
+                {% else %}
+                    <a href="{% url 'login' %}">Login</a><br/>
+                    <a href="{% url 'register' %}">Register</a><br/>
+                {% endif %}
             {% endif %}
             <br/></br>
             <a href="{% url 'index' %}">Index</a><br/>

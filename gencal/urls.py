@@ -4,9 +4,9 @@ from . import views
 
 urlpatterns = [
     # User admin browser endpoints
-    path("gencal/login", views.login_view, name="login"),
-    path("gencal/register", views.register, name="register"),
-    path("gencal/logout", views.logout_view, name="logout"),
+    #path("gencal/login", views.login_view, name="login"),
+    #path("gencal/register", views.register, name="register"),
+    #path("gencal/logout", views.logout_view, name="logout"),
 
     # Browser endpoints
     path("gencal", views.index, name='index'),
